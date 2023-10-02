@@ -26,12 +26,14 @@ function TaskItem({ task, isDragging }: { task: Task, isDragging: boolean }) {
       return errors;
     },
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      task.title=values.title
+      updateTask(task.id,task.status,task)
       setIsEditTitle(false)
     },
   }); 
-  const handleDeleteClick = () => {
-    showAlert("success","deleted")
+  const handleDeleteClick = async () => {
+    await deleteTask(task.id,task.status)
+    showAlert("success","Delete Successfully")
   };
 
   return (
@@ -60,16 +62,12 @@ function TaskItem({ task, isDragging }: { task: Task, isDragging: boolean }) {
                 <Image alt="Edit Icon" src={completeImg} className="max-w-full max-h-full" />
               </button>
             </div>
-
           </div>
-
-
         </form>
       ) : (
         <div className="grid grid-cols-12">
           <div className="col-span-10">
             <TaskDialog task={task}/>
-            {/* <h2 className="text-lg">{task.title}</h2> */}
           </div>
           <div className="col-span-1">
             <button onClick={() => setIsEditTitle(!isEditTitle)}

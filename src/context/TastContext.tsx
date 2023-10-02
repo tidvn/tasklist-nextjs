@@ -11,9 +11,9 @@ import CloseIcon from '@mui/icons-material/Close';
 
 interface TaskContextProps {
   tasks: TasksState;
-  showAlert: (severity: AlertColor, content: string) => void; // Định nghĩa hàm showAlert
-  addTask: (newTask: Task) => void;
-  updateTask: (params: { id: string; key: keyof TasksState; data: Task }) => void;
+  showAlert: (severity: AlertColor, content: string) => void;
+  addTask: () => void;
+  updateTask: ( id: string, key: keyof TasksState, data: Task ) => void;
   deleteTask: (deleteId: string, key: keyof TasksState) => void;
   handleOnDragEnd: (result: DropResult) => void;
 }

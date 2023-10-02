@@ -39,11 +39,10 @@ const TodoPanel = () => {
                 )}
               </Draggable>
             ))}
-
-           
-            {/* {provided.placeholder} */}
             {provided.placeholder}
-            <Button variant="outlined" className="w-full">
+            <Button
+            onClick={addTask}
+            variant="outlined" className="w-full">
               <span className="text-2xl">+</span> New
               </Button>
           </div>

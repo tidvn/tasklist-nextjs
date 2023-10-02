@@ -8,53 +8,39 @@ import { DropResult } from "react-beautiful-dnd";
 const useTask = () => {
     const [state, setState] = useState<TasksState>(fakeTasks);
 
-    const addTask = (newTask: Task) => {
+    const addTask = () => {
+      const newTask: Task = {
+        id:`${Math.floor(Math.random() * (999 - 100 + 1)) + 100}`,
+        title: "Untitled",
+        description: "",
+        deadline: new Date(new Date().getTime()+(7*24*60*60*1000)),
+        priority: "low",
+        status: "todo",
+        tags: [],
+        estimatedTime: 0,
+        completionPercentage: 0,
+      };
       setState({
         ...state,
         todo: [...state.todo, newTask],
       });
     };
   
-    const updateTask = ({id,key,data}: {id: string, key: keyof typeof state, data: Task}) => {
+    const updateTask = (id: string, key: keyof TasksState, data: Task) => {
       let updateIndex = state[key].findIndex((task) => task.id === id);
       state[key][updateIndex] = data
       setState({...state})
     };
   
     const deleteTask = (deleteId: string, key: keyof typeof state) => {
-      Swal.fire({
-        target: "#custom-target",
-        customClass: {
-          container: "position-absolute",
-        },
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-        position: "center",
-        background: "#2b2b2b",
-        color: "#f1f2f6",
-      }).then((result) => {
-        if (result.isConfirmed) {
+      
           const filteredTask = state[key].filter((task) => task.id !== deleteId);
           setState({
             ...state,
             [key]: [...filteredTask],
           });
   
-          Swal.fire({
-            text: "The Task Has been Deleted",
-            icon: "success",
-            timer: 2000,
-            position: "center",
-            background: "#2b2b2b",
-            color: "#f1f2f6",
-          });
-        }
-      });
+          
     };
   
     const removeFromList = (taskList: Task[], index: number) => {
