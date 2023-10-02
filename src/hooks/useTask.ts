@@ -71,7 +71,6 @@ const useTask = () => {
   
     const handleOnDragEnd = (result: DropResult) => {
       if(!result.destination) return;
-      console.log(result)
       const copiedState = {...state};
       const sourceList = copiedState[result.source.droppableId as keyof typeof state];
       const {removedItem, newSourceList} = removeFromList(sourceList, result.source.index);

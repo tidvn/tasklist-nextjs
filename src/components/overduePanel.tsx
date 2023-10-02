@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import Image from 'next/image';
 import { useTaskContext } from "@/context/TastContext";
-import TaskItem from "./TaskItem";
+import TaskItem from "@/components/Task/TaskItem";
 
 
 const OverduePanel = () => {

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import Image from 'next/image';
 import { useTaskContext } from "@/context/TastContext";
-import TaskItem from "./TaskItem";
+import TaskItem from "@/components/Task/TaskItem";
 import Button from '@mui/material/Button';
 
 
@@ -42,7 +42,7 @@ const TodoPanel = () => {
 
            
             {/* {provided.placeholder} */}
-            
+            {provided.placeholder}
             <Button variant="outlined" className="w-full">
               <span className="text-2xl">+</span> New
               </Button>

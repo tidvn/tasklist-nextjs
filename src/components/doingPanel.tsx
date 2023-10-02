@@ -1,10 +1,8 @@
 "use client"
 import inprogress from "@/public/images/inprogress.png";
-import { useEffect, useRef, useState } from "react";
-import { Task } from "../types";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import Image from 'next/image';
-import TaskItem from "./TaskItem";
+import TaskItem from "@/components/Task/TaskItem";
 import { useTaskContext } from "@/context/TastContext";
 
 // interface PropTypes {

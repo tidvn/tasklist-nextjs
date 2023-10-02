@@ -8,7 +8,6 @@ export interface Task {
     tags: string[]; // Các nhãn liên quan
     estimatedTime: number; // Thời gian dự kiến hoàn thành (đơn vị giờ)
     completionPercentage: number; // Phần trăm hoàn thành công việc
-
 }
 export interface TasksState {
     todo: Task[];

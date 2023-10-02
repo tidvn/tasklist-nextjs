@@ -1,14 +1,9 @@
 "use client"
 import completeImg from "@/public/images/complete.png";
-import addNewImg from "@/public/images/add-new.png";
-import editImg from "@/public/images/edit.png";
-import deleteImg from "@/public/images/delete.png";
-import { Task } from "../types";
-import { useEffect, useRef, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import Image from 'next/image';
 import { useTaskContext } from "@/context/TastContext";
-import TaskItem from "./TaskItem";
+import TaskItem from "@/components/Task/TaskItem";
 
 
 const DonePanel = () => {
@@ -26,7 +21,7 @@ const DonePanel = () => {
         </div>
       </div>
       <Droppable droppableId="done">
-        {(provided, snapshot) => (
+        {(provided) => (
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
