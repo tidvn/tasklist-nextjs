@@ -5,68 +5,83 @@ import { Task } from '../types';
 import addNewImg from "@/public/images/add-new.png";
 import editImg from "@/public/images/edit.png";
 import deleteImg from "@/public/images/delete.png";
+import { Formik, useFormik } from 'formik';
+import { TextField } from '@mui/material';
 function TaskItem({ task, isDragging}:{task:Task,isDragging:boolean}) {
   const {tasks, addTask, updateTask, deleteTask} = useTaskContext();
-
-  const [isUpdate, setIsUpdate] = useState(false);
-  const [updateState, setUpdateState] = useState({ id: task.id, title: task.title });
-  const UpdateInputRef = useRef(null);
+  const [isEditTitle, setIsEditTitle] = useState(false);
 
   const toggleUpdateMode = () => {
-    setIsUpdate(!isUpdate);
+    console.log(isEditTitle)
+    setIsEditTitle(!isEditTitle);
   };
-//  const handleUpdateTask = ({id,event}: {id: string;event: React.KeyboardEvent<HTMLElement>}) => {
-//     if (event.key === "Enter") {
-//       if (updateState?.title === "") return;
-//       if (!updateState) return;
-//       updateTask({ id, task.status , data: updateState });
-//       setIsUpdate(false);
-//     }
-//   };
+  const formik = useFormik({
+    initialValues: {
+      title: '',
+    },
+    validate: (values) => {
+      const errors:any = {};
+      if (!values.title) {
+        errors.title = 'Required';
+      }
+
+      return errors;
+    },
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
   return (
-    <div className={`${isUpdate ? 'flex' : ''} ${isDragging ? 'border-2 border-teal-500 shadow-md shadow-green-100' : ''} justify-between px-4 bg-slate-50 py-3 capitalize rounded-lg`}>
-      {isUpdate ? (
-        <div className="flex w-full items-center my-3 border">
-          <Image alt="Img" className="w-6 ml-3 mr-3" src={addNewImg} />
-          <input
-            className="outline-none bg-slate-50 pl-3 py-2 w-full"
-            type="text"
-            ref={UpdateInputRef}
-            onChange={(e) =>
-              setUpdateState({
-                ...updateState,
-                title: e.target.value,
-              })
-            }
-            value={updateState.title}
-            // onKeyDown={(e) => handleUpdateTask({ id: task.id, event: e })}
-            placeholder="Type a Name..."
-          />
-          <button
-            onClick={toggleUpdateMode}
-            className="px-3 py-2 bg-red-100 font-bold text-red-500 text-center"
-          >
-            X
-          </button>
-        </div>
+    <div className={`${isEditTitle ? 'flex' : ''} ${isDragging ? 'border-2 border-teal-500 shadow-md shadow-green-100' : ''} justify-between px-4 bg-slate-50 py-3 capitalize rounded-lg`}>
+      {isEditTitle ? (
+        <form onSubmit={formik.handleSubmit}>
+      <div className="grid grid-cols-12">        
+      <div className="col-span-11">
+      <TextField
+          fullWidth
+          id="title"
+          name="title"
+          label="title"
+          value={formik.values.title}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.title && Boolean(formik.errors.title)}
+          helperText={formik.touched.title && formik.errors.title}
+        />
+      </div>
+      <div className="col-span-1">
+        <Image
+          alt="Edit Icon"
+          onClick={() => toggleUpdateMode}
+          className="w-full cursor-pointer p-1  ml-4"
+          src={editImg}
+        />
+      </div>
+      </div>
+    </form>
       ) : (
-        <div className="flex justify-between">
-          <h2 className="text-lg">{task.title}</h2>
-          <div className="flex gap-6 items-center">
-            <Image
-              alt="Edit Icon"
-              // onClick={() => handleIsUpdate(task)}
-              className="w-5 cursor-pointer"
-              src={editImg}
-            />
-            <Image
-              alt="Delete Icon"
-              // onClick={() => deleteTask(task.id, "progress")}
-              className="w-5 cursor-pointer"
-              src={deleteImg}
-            />
-          </div>
-        </div>
+        <div className="grid grid-cols-12">
+  <div className="col-span-10">
+    <h2 className="text-lg ml-4">{task.title}</h2>
+  </div>
+  <div className="col-span-1">
+    <Image
+      alt="Edit Icon"
+      onClick={() => toggleUpdateMode}
+      className="w-full cursor-pointer p-1  ml-4"
+      src={editImg}
+    />
+  </div>
+  <div className="col-span-1">
+    <Image
+      alt="Delete Icon"
+      // onClick={() => deleteTask(task.id, "progress")}
+      className="w-full cursor-pointer p-1 ml-4" // Sử dụng lớp w-1/12 để chiếm 1/12 độ rộng và ml-4 để căn lề
+      src={deleteImg}
+    />
+  </div>
+</div>
+
       )}
     </div>
   );

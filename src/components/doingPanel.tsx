@@ -24,36 +24,7 @@ import { useTaskContext } from "@/context/TastContext";
 const DoingPanel = () => {
   const {tasks,addTask} = useTaskContext();
   const doingTask = tasks.doing
-  // const { tasks, updateTask, deleteTask } = props;
-  // const [isUpdate, setIsUpdate] = useState<boolean>(false);
-  // const [updateState, setUpdateState] = useState<Task>();
-  // const UpdateInputRef = useRef<HTMLInputElement | null>(null);
-
-  // const handleUpdateTask = ({
-  //   id,
-  //   event,
-  // }: {
-  //   id: string;
-  //   event: React.KeyboardEvent<HTMLElement>;
-  // }) => {
-  //   if (event.key === "Enter") {
-  //     if (updateState?.title === "") return;
-  //     if (!updateState) return;
-  //     updateTask({ id, key: "doing", data: updateState });
-  //     setIsUpdate(false);
-  //   }
-  // };
-
-  // const handleIsUpdate = (item: Task) => {
-  //   setIsUpdate(true);
-  //   setUpdateState(item);
-  // };
-
-  // useEffect(() => {
-  //   if (isUpdate) return UpdateInputRef.current?.focus();
-  // }, [isUpdate]);
-
-  return (
+    return (
     <div className="w-[26rem]">
       <div>
         <div className="flex items-center gap-2">
