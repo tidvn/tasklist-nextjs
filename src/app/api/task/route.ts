@@ -1,9 +1,9 @@
 import clientPromise from "@/database/mongodb";
 import { Task, TasksState } from "@/types/index";
 import { NextResponse } from "next/server";
-const  headers = {
+const headers = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   'Access-Control-Allow-Credentials': 'true',
 }
@@ -40,20 +40,12 @@ export async function GET(req: Request) {
         }),
       };
       
-      return NextResponse.json({ success: true, data: tasksState }, { status: 200, headers: {
-        'Access-Control-Allow-Origin': origin || '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      }, });
+      return NextResponse.json({ success: true, data: tasksState }, { status: 200, headers:headers });
     
       
   } catch (e) {
     console.log(e)
-    return NextResponse.json({ success: false, data: e }, { status: 400,headers: {
-      'Access-Control-Allow-Origin': origin || '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    }, });
+    return NextResponse.json({ success: false, data: e }, { status: 400,headers:headers });
   }
 }
 export async function POST(req: Request) {
