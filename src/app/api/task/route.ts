@@ -51,7 +51,6 @@ export async function POST(req: Request) {
     const db = client.db("TodoApp");
     const collection = db.collection("TodoCollection")
     const taskData = await req.json()
-    console.log(taskData)
     const {id,...value} = taskData
     await collection.insertOne(value)
     return NextResponse.json({ success: true, data: value._id }, { status: 200 });

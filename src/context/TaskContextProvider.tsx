@@ -7,6 +7,7 @@ import useSWR from "swr";
 import Alert from "@mui/material/Alert";
 import { AlertColor, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import { da } from "date-fns/locale";
 
 interface TaskContextProps {
     tasks: TasksState;
@@ -86,30 +87,56 @@ const TaskContextProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const updateTask = async (id: string, oldStatus: keyof TasksState, data: Task) => {
-        const taskToUpdateIndex = listTask[oldStatus].findIndex((task) => task.id === id);
-        const overdue = new Date(data.deadline) <= new Date()
-        if (taskToUpdateIndex !== -1) {
-            const result = await dbupdateTask(id,data)
-            if (result.data != 1) {
-                return
-            }
-            
-            if (oldStatus !== data.status || overdue) {                
-                const deleteOldStatus = listTask[oldStatus].filter((task) => task.id !== id);
-                const updatedNewStatus = overdue ? "overdue" : [...listTask[data.status], data];
-                setListTask((prevState) => ({
-                    ...prevState,
-                    [oldStatus]: deleteOldStatus,
-                    [data.status]: updatedNewStatus,
-                }));
-            } else {
-                listTask[oldStatus][taskToUpdateIndex] = data;
-                setListTask({ ...listTask });
-            }
+
+        const newStatus = data.status
+        const isOverdue = new Date(data.deadline) <= new Date() && data.status != 'done';
+        const taskInListIndex = listTask[oldStatus].findIndex((task) => task.id === id);
+        const taskInOverdueIndex = listTask['overdue'].findIndex((task) => task.id === id);
+
+        const result = await dbupdateTask(id, data);
+
+        if (result.data !== 1) {
+            return
         }
+
+        if (taskInListIndex != -1 && !isOverdue && newStatus != oldStatus) {
+            const deleteOldStatus = listTask[oldStatus].filter((task) => task.id !== id);
+            const updatedNewStatus = [...listTask[newStatus], data];
+
+            setListTask((prevState) => ({
+                ...prevState,
+                [oldStatus]: deleteOldStatus,
+                [newStatus]: updatedNewStatus,
+            }));
+        } else if (taskInListIndex != -1 && !isOverdue && newStatus == oldStatus) {
+            listTask[oldStatus][taskInListIndex] = data;
+            setListTask({ ...listTask });
+        } else if (taskInListIndex != -1 && isOverdue) {
+            const deleteOldStatus = listTask[oldStatus].filter((task) => task.id !== id);
+            const updatedNewStatus = [...listTask['overdue'], data]
+
+            setListTask((prevState) => ({
+                ...prevState,
+                [oldStatus]: deleteOldStatus,
+                ['overdue']: updatedNewStatus,
+            }));
+        } else if (taskInOverdueIndex != -1 && !isOverdue) {
+            const deleteOldStatus = listTask['overdue'].filter((task) => task.id !== id);
+            const updatedNewStatus = [...listTask[newStatus], data]
+
+            setListTask((prevState) => ({
+                ...prevState,
+                ['overdue']: deleteOldStatus,
+                [newStatus]: updatedNewStatus,
+            }));
+        } else if (taskInOverdueIndex != -1 && isOverdue) {
+            listTask['overdue'][taskInOverdueIndex] = data;
+            setListTask({ ...listTask });
+        }
+
     };
 
-    const deleteTask = async (deleteId: string, key: keyof typeof listTask) => {
+    const deleteTask = async (deleteId: string, key: keyof TasksState) => {
         const filteredTask = listTask[key].filter((task) => task.id !== deleteId);
         const res = await dbdeleteTask(deleteId)
         if (res.data != 1) {
@@ -133,7 +160,7 @@ const TaskContextProvider = ({ children }: { children: React.ReactNode }) => {
     const handleOnDragEnd = async (result: DropResult) => {
         if (!result.destination) return;
         const copiedState = { ...listTask };
-        if(result.destination.droppableId === "overdue" ) result;
+        if (result.destination.droppableId === "overdue") result;
         const sourceList = copiedState[result.source.droppableId as keyof typeof listTask];
         const { removedItem, newSourceList } = removeFromList(sourceList, result.source.index);
         copiedState[result.source.droppableId as keyof typeof listTask] = newSourceList;

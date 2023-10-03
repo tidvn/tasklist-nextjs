@@ -14,10 +14,8 @@
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.14.11",
     "@mui/material": "^5.14.11",
-    "@mui/x-date-pickers": "^6.16.0",
     "axios": "^1.5.1",
     "date-fns": "^2.30.0",
-    "dayjs": "^1.11.10",
     "formik": "^2.4.5",
     "mongodb": "^6.1.0",
     "next": "latest",
@@ -36,7 +34,6 @@
     "eslint-config-next": "latest",
     "postcss": "latest",
     "react-beautiful-dnd": "^13.1.1",
-    "sweetalert2": "latest",
     "tailwindcss": "latest",
     "typescript": "latest"
   }

@@ -14,7 +14,6 @@ export async function PUT(req: Request,{ params }: { params: { id: string } }) {
     const db = client.db("TodoApp");
     const collection = db.collection("TodoCollection")
     const updateTask = await req.json()
-    console.log(updateTask)
     const result = id === updateTask.id ? await collection.updateOne({ _id: new ObjectId(id) }, { $set: updateTask }) : null;
     const res = result?.modifiedCount
     return NextResponse.json({ success: true, data: res }, { status: 200 });

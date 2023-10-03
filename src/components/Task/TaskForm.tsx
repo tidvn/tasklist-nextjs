@@ -10,8 +10,6 @@ import { format } from 'date-fns';
 import Slider from '@mui/material/Slider';
 import { Task } from '@/types/index';
 import { useTaskContext } from '@/context/TaskContextProvider';
-import dayjs from 'dayjs';
-import { DatePicker } from '@mui/x-date-pickers';
 
 const TaskForm = (props: any) => {
   const { task, formikRef } = props;
@@ -51,8 +49,7 @@ const TaskForm = (props: any) => {
         estimatedTime: values.estimatedTime, 
         completionPercentage: values.completionPercentage
       }
-      const status = new Date(task.deadline) <= new Date() ? 'overdue' : task.status;
-      await updateTask(task.id, status, taskUpdate);
+      await updateTask(task.id, task.status, taskUpdate);
    
     },
   });

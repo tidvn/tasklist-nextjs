@@ -1,8 +1,6 @@
 import React from 'react';
 import { Card, CardContent, Typography, Chip, Grid, Paper } from '@mui/material';
 import { format } from 'date-fns';
-import DoneIcon from '@mui/icons-material/Done';
-import ScheduleIcon from '@mui/icons-material/Schedule';
 import { Task } from '@/types/index';
 
 interface TaskProps {
@@ -13,10 +11,12 @@ const TaskCard: React.FC<TaskProps> = ({ task }) => {
     return (
         <Card style={{ boxShadow: 'none', border: '0px solid #e0e0e0' }}>
             <CardContent >
+            <div style={{ marginBottom: '20px', }}>
                 <Typography className="mt-2" variant="body1" color="black" style={{ fontWeight: 'bold' }}>
                     {task.description}
                 </Typography>
-
+                </div>
+                <div style={{ marginBottom: '16px'}}>
                 <Grid className="mt-2" container spacing={2} alignItems="center">
                     <Grid item>
                         <Chip
@@ -39,9 +39,12 @@ const TaskCard: React.FC<TaskProps> = ({ task }) => {
                         />
                     </Grid>
                 </Grid>
+                </div>
+                <div style={{ marginBottom: '16px'}}>
                 <Typography className="mt-3" variant="body2" color="black" gutterBottom>
                 <span style={{ fontWeight: 'bold' }}> Deadline:</span>  {format(new Date(task.deadline), 'dd/MM/yyyy')}
                 </Typography>
+                </div>
                 <Typography className="mt-3" variant="body2" color="black" gutterBottom>                   
                     <span style={{ fontWeight: 'bold' }}> Estimated Time:</span>  {task.estimatedTime} hours
                 </Typography>
