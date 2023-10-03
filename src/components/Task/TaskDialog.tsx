@@ -19,17 +19,22 @@ export default function TaskDialog(props: any) {
         setDialog(!dialog);
     };
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = async () => {
         if (taskFormRef.current) {
             taskFormRef.current.handleSubmit();
+            await setDialog(false)
+            setIsEdit(false)
+
         }
+        
+        
     };
 
     return (
         <div>
-            <button onClick={toggleDialog} style={{ textAlign: 'left' }}>
+            <div onClick={toggleDialog} style={{ textAlign: 'left' }}>
                 <h2 className="text-lg">{task.title}</h2>
-            </button>
+            </div>
             <Dialog
                 open={dialog}
                 fullWidth

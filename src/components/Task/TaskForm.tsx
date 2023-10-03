@@ -8,9 +8,13 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { format } from 'date-fns';
 import Slider from '@mui/material/Slider';
+import { Task } from '@/types/index';
+import { useTaskContext } from '@/context/TastContext';
 
 const TaskForm = (props: any) => {
   const { task, formikRef } = props;
+  const { tasks, addTask, updateTask, deleteTask,showAlert } = useTaskContext();
+
 
   const validationSchema = Yup.object({
     title: Yup.string().required('Vui lòng nhập tiêu đề'),
@@ -23,7 +27,7 @@ const TaskForm = (props: any) => {
     completionPercentage: Yup.number().required('Vui lòng nhập phần trăm hoàn thành'),
   });
   const formik = useFormik({
-    initialValues: {
+    initialValues:  {
       title: task.title || '',
       description: task.description || '',
       deadline: format(task.deadline, 'yyyy-MM-dd') || new Date(),
@@ -34,9 +38,20 @@ const TaskForm = (props: any) => {
       completionPercentage: task.completionPercentage || 0,
     },
     validationSchema,
-    onSubmit: (values) => {
-      console.log(values)
-
+    onSubmit: async (values) => {
+      // console.log(values)
+      const taskObject: Task = {
+        id: task.id,
+        deadline: new Date(values.deadline),
+        title: values.title,
+        description: values.description,
+        priority: values.priority,
+        status: values.status,
+        tags:  values.tags,
+        estimatedTime: values.estimatedTime,
+        completionPercentage: task.completionPercentage
+      }
+      await updateTask(task.id,task.status,taskObject)    
     },
   });
   React.useImperativeHandle(formikRef, () => ({
@@ -143,7 +158,7 @@ const TaskForm = (props: any) => {
       <div style={{ marginBottom: '16px' }}>
         <p>% Completion</p>
         <Slider
-          defaultValue={0}
+          defaultValue={formik.values.completionPercentage}
           getAriaValueText={(number) => `${number}%`}
           step={5}
           marks
