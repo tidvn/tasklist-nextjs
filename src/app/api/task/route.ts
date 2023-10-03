@@ -3,7 +3,6 @@ import { Task, TasksState } from "@/types/index";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
-  const origin = req.headers.get("origin")
   try {
     const client = await clientPromise;
     if (!client) {
@@ -36,29 +35,17 @@ export async function GET(req: Request) {
     };
 
     return NextResponse.json({ success: true, data: tasksState }, {
-      status: 200, headers: {
-        'Access-Control-Allow-Origin': origin || '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Credentials': 'true',
-      },
-    });
+      status: 200, });
 
 
   } catch (e) {
     console.log(e)
     return NextResponse.json({ success: false, data: e }, {
-      status: 400, headers: {
-        'Access-Control-Allow-Origin': origin || '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Credentials': 'true',
-      },
+      status: 400,
     });
   }
 }
 export async function POST(req: Request) {
-  const origin = req.headers.get("origin")
   try {
     const client = await clientPromise;
     if (!client) {
@@ -70,22 +57,12 @@ export async function POST(req: Request) {
     const { id, ...value } = taskData
     await collection.insertOne(value)
     return NextResponse.json({ success: true, data: value._id }, {
-      status: 200, headers: {
-        'Access-Control-Allow-Origin': origin || '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Credentials': 'true',
-      },
+      status: 200,
     });
   } catch (e) {
     console.log(e)
     return NextResponse.json({ success: true, data: e }, {
-      status: 200, headers: {
-        'Access-Control-Allow-Origin': origin || '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Credentials': 'true',
-      },
+      status: 200,
     });
   }
 }
