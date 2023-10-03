@@ -1,6 +1,11 @@
 import clientPromise from "@/database/mongodb";
 import { Task, TasksState } from "@/types/index";
 import { NextResponse } from "next/server";
+const  headers = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+}
 export async function GET(req: Request) {
   try {
     
@@ -34,12 +39,12 @@ export async function GET(req: Request) {
         }),
       };
       
-      return NextResponse.json({ success: true, data: tasksState }, { status: 200 });
+      return NextResponse.json({ success: true, data: tasksState }, { status: 200,headers:headers });
     
       
   } catch (e) {
     console.log(e)
-    return NextResponse.json({ success: false, data: e }, { status: 400 });
+    return NextResponse.json({ success: false, data: e }, { status: 400,headers:headers });
   }
 }
 export async function POST(req: Request) {
@@ -53,9 +58,9 @@ export async function POST(req: Request) {
     const taskData = await req.json()
     const {id,...value} = taskData
     await collection.insertOne(value)
-    return NextResponse.json({ success: true, data: value._id }, { status: 200 });
+    return NextResponse.json({ success: true, data: value._id }, { status: 200,headers:headers });
   } catch (e) {
     console.log(e)
-    return NextResponse.json({ success: true, data: e }, { status: 200 });
+    return NextResponse.json({ success: true, data: e }, { status: 200,headers:headers });
   }
 }

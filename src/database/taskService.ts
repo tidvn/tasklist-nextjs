@@ -2,7 +2,7 @@ import axios from "axios";
 import { Task } from "@/types/index";
 
 const instance = axios.create({
-  baseURL: `/api/`,
+  baseURL: `https://tidvn-todoapp.vercel.app/api/`,
   withCredentials: true,
 });
 
