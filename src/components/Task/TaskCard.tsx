@@ -30,9 +30,7 @@ const TaskCard: React.FC<TaskProps> = ({ task }) => {
                             color={
                                 task.status === 'done'
                                     ? 'success'
-                                    : task.status === 'overdue'
-                                        ? 'error'
-                                        : task.status === 'doing'
+                                    : task.status === 'doing'
                                             ? 'info'
                                             : 'primary'
                             }
