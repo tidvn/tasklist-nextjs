@@ -2,7 +2,7 @@ import axios from "axios";
 import { Task } from "@/types/index";
 
 const instance = axios.create({
-  baseURL: `http://localhost:3000/api/`,
+  baseURL: `/api/`,
   withCredentials: true,
 });
 

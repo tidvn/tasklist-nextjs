@@ -4,21 +4,6 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 import Image from 'next/image';
 import TaskItem from "@/components/Task/TaskItem";
 import { useTaskContext } from "@/context/TaskContextProvider";
-
-// interface PropTypes {
-//   tasks: Task[];
-//   updateTask: ({
-//     id,
-//     key,
-//     data,
-//   }: {
-//     id: string;
-//     key: "doing";
-//     data: Task;
-//   }) => void;
-//   deleteTask: (id: string, key: "doing") => void;
-// }
-
 const DoingPanel = () => {
   const {tasks,addTask,error,isLoading} = useTaskContext();
   if(error){

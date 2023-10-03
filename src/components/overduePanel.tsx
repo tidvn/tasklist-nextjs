@@ -9,6 +9,7 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 import Image from 'next/image';
 import { useTaskContext } from "@/context/TaskContextProvider";
 import TaskItem from "@/components/Task/TaskItem";
+import { ta } from "date-fns/locale";
 
 
 const OverduePanel = () => {
@@ -36,7 +37,7 @@ const OverduePanel = () => {
         <div className="border p-5 shadow-md rounded-md mt-4" >
               {overdueTask.map((task, index) => (
                 
-                    <div  className="my-3">
+                    <div key={task.id} className="my-3">
                       <TaskItem task={task} isDragging={false} />
                     </div>
                  
