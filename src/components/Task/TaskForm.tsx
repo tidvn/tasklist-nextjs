@@ -10,10 +10,11 @@ import { format } from 'date-fns';
 import Slider from '@mui/material/Slider';
 import { Task } from '@/types/index';
 import { useTaskContext } from '@/context/TaskContextProvider';
+import { Badge } from '@mui/material';
 
 const TaskForm = (props: any) => {
   const { task, formikRef } = props;
-  const { tasks, addTask, updateTask, deleteTask,showAlert } = useTaskContext();
+  const { tasks, addTask, updateTask, deleteTask, showAlert } = useTaskContext();
 
   const validationSchema = Yup.object({
     title: Yup.string().required('Vui lòng nhập tiêu đề'),
@@ -26,7 +27,7 @@ const TaskForm = (props: any) => {
     completionPercentage: Yup.number().required('Vui lòng nhập phần trăm hoàn thành'),
   });
   const formik = useFormik({
-    initialValues:  {
+    initialValues: {
       title: task.title || '',
       description: task.description || '',
       deadline: format(new Date(task.deadline), 'yyyy-MM-dd') || new Date(),
@@ -37,7 +38,7 @@ const TaskForm = (props: any) => {
       completionPercentage: task.completionPercentage || 0,
     },
     validationSchema,
-    onSubmit: async (values) => { 
+    onSubmit: async (values) => {
       const taskUpdate: Task = {
         id: task.id,
         deadline: new Date(values.deadline),
@@ -45,12 +46,12 @@ const TaskForm = (props: any) => {
         description: values.description,
         priority: values.priority,
         status: values.status,
-        tags:  values.tags,
-        estimatedTime: values.estimatedTime, 
+        tags: values.tags,
+        estimatedTime: values.estimatedTime,
         completionPercentage: values.completionPercentage
       }
       await updateTask(task.id, task.status, taskUpdate);
-   
+
     },
   });
   React.useImperativeHandle(formikRef, () => ({
@@ -87,51 +88,54 @@ const TaskForm = (props: any) => {
         />
       </div>
       <div style={{ marginBottom: '16px', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-    <div style={{ flex: 1, marginRight: '16px' }}>
-      <TextField
-        fullWidth
-        id="deadline"
-        name="deadline"
-        label="Deadline"
-        type="date"
-        value={formik.values.deadline}
-        onChange={formik.handleChange}
-        error={formik.touched.deadline && Boolean(formik.errors.deadline)}
-      />
-    </div>
-    <div style={{ flex: 1, marginRight: '16px' }}>
-      <TextField
-        fullWidth
-        id="priority"
-        name="priority"
-        label="Priority"
-        select
-        value={formik.values.priority}
-        onChange={formik.handleChange}
-        error={formik.touched.priority && Boolean(formik.errors.priority)}
-      >
-        <MenuItem value="low">Low</MenuItem>
-        <MenuItem value="medium">Medium</MenuItem>
-        <MenuItem value="high">High</MenuItem>
-      </TextField>
-    </div>
-    <div style={{ flex: 1 }}>
-      <TextField
-        fullWidth
-        id="status"
-        name="status"
-        label="Status"
-        select
-        value={formik.values.status}
-        onChange={formik.handleChange}
-        error={formik.touched.status && Boolean(formik.errors.status)}
-      >
-        <MenuItem value="todo">To-Do</MenuItem>
-        <MenuItem value="doing">Doing</MenuItem>
-        <MenuItem value="done">Done</MenuItem>
-      </TextField>
-    </div>
-  </div>
+        
+          <div style={{ flex: 1, marginRight: '16px' }}>
+            <TextField
+              fullWidth
+              id="deadline"
+              name="deadline"
+              label="Deadline"
+              type="date"
+              value={formik.values.deadline}
+              onChange={formik.handleChange}
+              error={formik.touched.deadline && Boolean(formik.errors.deadline)}
+            />
+
+          </div>
+      
+        <div style={{ flex: 1, marginRight: '16px' }}>
+          <TextField
+            fullWidth
+            id="priority"
+            name="priority"
+            label="Priority"
+            select
+            value={formik.values.priority}
+            onChange={formik.handleChange}
+            error={formik.touched.priority && Boolean(formik.errors.priority)}
+          >
+            <MenuItem value="low">Low</MenuItem>
+            <MenuItem value="medium">Medium</MenuItem>
+            <MenuItem value="high">High</MenuItem>
+          </TextField>
+        </div>
+        <div style={{ flex: 1 }}>
+          <TextField
+            fullWidth
+            id="status"
+            name="status"
+            label="Status"
+            select
+            value={formik.values.status}
+            onChange={formik.handleChange}
+            error={formik.touched.status && Boolean(formik.errors.status)}
+          >
+            <MenuItem value="todo">To-Do</MenuItem>
+            <MenuItem value="doing">Doing</MenuItem>
+            <MenuItem value="done">Done</MenuItem>
+          </TextField>
+        </div>
+      </div>
       <div style={{ marginBottom: '16px' }}>
         <TextField
           fullWidth
@@ -144,37 +148,37 @@ const TaskForm = (props: any) => {
         />
       </div>
       <div style={{ marginBottom: '16px', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-      <div style={{ flex: 1,marginRight: '16px' }}>
-        <TextField
-          fullWidth
-          id="estimatedTime"
-          name="estimatedTime"
-          label="EstimatedTime"
-          type="number"
-          value={formik.values.estimatedTime}
-          onChange={formik.handleChange}
-          error={formik.touched.estimatedTime && Boolean(formik.errors.estimatedTime)}
-        />
-      </div>
-      <div style={{ flex: 1,marginRight: '16px' }}>
-        <p>% Completion</p>
-        <Slider
-          defaultValue={formik.values.completionPercentage}
-          getAriaValueText={(number) => `${number}%`}
-          id="completionPercentage"
-          name="completionPercentage"
-          step={5}
-          marks
-          min={0}
-          max={100}
-          onChange={formik.handleChange}
-          // onChange={(event, newValue) => {
-          //   console.log(newValue)
-          //   formik.setFieldValue('completionPercentage', newValue);
-          // }}
-          valueLabelDisplay="auto"
-        />
-      </div>
+        <div style={{ flex: 1, marginRight: '16px' }}>
+          <TextField
+            fullWidth
+            id="estimatedTime"
+            name="estimatedTime"
+            label="EstimatedTime"
+            type="number"
+            value={formik.values.estimatedTime}
+            onChange={formik.handleChange}
+            error={formik.touched.estimatedTime && Boolean(formik.errors.estimatedTime)}
+          />
+        </div>
+        <div style={{ flex: 1, marginRight: '16px' }}>
+          <p>% Completion</p>
+          <Slider
+            defaultValue={formik.values.completionPercentage}
+            getAriaValueText={(number) => `${number}%`}
+            id="completionPercentage"
+            name="completionPercentage"
+            step={5}
+            marks
+            min={0}
+            max={100}
+            onChange={formik.handleChange}
+            // onChange={(event, newValue) => {
+            //   console.log(newValue)
+            //   formik.setFieldValue('completionPercentage', newValue);
+            // }}
+            valueLabelDisplay="auto"
+          />
+        </div>
       </div>
       {/* <div style={{ marginBottom: '16px' }}>
             <Button type="submit" variant="contained" color="primary">

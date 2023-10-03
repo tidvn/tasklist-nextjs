@@ -137,14 +137,22 @@ const TaskContextProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const deleteTask = async (deleteId: string, key: keyof TasksState) => {
-        const filteredTask = listTask[key].filter((task) => task.id !== deleteId);
+        // const filteredTask = listTask[key].filter((task) => task.id !== deleteId);
+
+        const targetListKey = listTask[key].findIndex((task) => task.id === deleteId) !== -1
+            ? key
+            : 'overdue';
+
+        const filteredTask = listTask[targetListKey].filter((task) => task.id !== deleteId);
+
+        
         const res = await dbdeleteTask(deleteId)
         if (res.data != 1) {
             return
         }
         setListTask({
             ...listTask,
-            [key]: [...filteredTask],
+            [targetListKey]: [...filteredTask],
         });
     };
     const removeFromList = (taskList: Task[], index: number) => {
@@ -159,18 +167,16 @@ const TaskContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
     const handleOnDragEnd = async (result: DropResult) => {
         if (!result.destination) return;
-        const copiedState = { ...listTask };
-        if (result.destination.droppableId === "overdue") result;
+        const copiedState = { ...listTask };       
         const sourceList = copiedState[result.source.droppableId as keyof typeof listTask];
         const { removedItem, newSourceList } = removeFromList(sourceList, result.source.index);
-        copiedState[result.source.droppableId as keyof typeof listTask] = newSourceList;
-        const destinationList = copiedState[result.destination.droppableId as keyof typeof listTask];
-        copiedState[result.destination.droppableId as keyof typeof listTask] = addToList(destinationList, result.destination.index, removedItem);
         const update: any = {
             ...removedItem,
             status: result.destination.droppableId,
         };
-
+        copiedState[result.source.droppableId as keyof typeof listTask] = newSourceList;
+        const destinationList = copiedState[result.destination.droppableId as keyof typeof listTask];
+        copiedState[result.destination.droppableId as keyof typeof listTask] = addToList(destinationList, result.destination.index, update);
         const r = await dbupdateTask(result.draggableId, update);
         if (r.data !== 1) return;
         setListTask(copiedState);
