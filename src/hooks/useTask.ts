@@ -1,35 +1,49 @@
 "use client"
 import { useEffect, useState } from "react";
 import { Task, TasksState } from "@/types/index";
-import { fakeTasks } from "@/data/index";
-import Swal from "sweetalert2";
 import { DropResult } from "react-beautiful-dnd";
 import { dbaddTask, dbgetTask } from "@/database/taskService";
 import useSWR from "swr";
 
+
+export interface Status {
+  error: any;
+  isLoading: Boolean;
+  
+}
 const useTask = async () => {
+  const { data, error, isLoading } = useSWR('/task',dbgetTask)
+  const [status, setStatus] = useState<Status>({
+    error: "no data",
+    isLoading:false,
+  })
+
   const [listTask, setListTask] = useState<TasksState>({
     todo:[],
     doing:[],
     done:[],
     overdue:[]
   });
-   const result = (await dbgetTask()).data
-   console.log(result)
-  const tasksWithId : any = result.map((task:any) => {
-    const { _id, ...rest } = task;
-    return { id: _id.toHexString(), ...rest };
-  });
-  const tasksState: TasksState = {
-    todo: tasksWithId.filter((task:any) => task.status === "todo"),
-    doing: tasksWithId.filter((task:any) => task.status === "doing"),
-    done: tasksWithId.filter((task:any) => task.status === "done"),
-    overdue: tasksWithId.filter((task:any) => task.status === "overdue"),
-  };
-  console.log(tasksState)
-  // const { data, error, isValidating } = useSWR(dbgetTask)
-  // useEffect(() => {
-  // }, [data]);
+
+
+  useEffect(() => {
+    setStatus({
+      error: error || "no data",
+      isLoading: isLoading || false,
+    });
+  
+    if (data?.success) {
+      const tasks = data.data;
+      setListTask({
+        todo: tasks.todo || [],
+        doing: tasks.doing || [],
+        done: tasks.done || [],
+        overdue: tasks.overdue || [],
+      });
+    }
+  }, [data, error, isLoading]);
+  
+
   const addTask = async () => {
     const newTask: Task = {
       id: "",
@@ -105,6 +119,8 @@ const useTask = async () => {
   }
 
   return {
+    isLoading:status.isLoading,
+    error:status.error,
     tasks: listTask,
     addTask,
     updateTask,

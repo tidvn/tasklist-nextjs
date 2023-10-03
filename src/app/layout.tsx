@@ -3,9 +3,9 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { TaskProvider } from '@/context/TastContext'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import TaskContextProvider from '@/context/TaskContextProvider';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,10 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <TaskProvider>
+      <TaskContextProvider>
         <body className={inter.className}>{children}</body>
-      </TaskProvider>
-
+      </TaskContextProvider>
     </html>
 
   )

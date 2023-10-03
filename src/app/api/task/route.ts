@@ -14,12 +14,32 @@ export async function GET(req: Request) {
       .find({})
       .sort({ metacritic: -1 })
       .toArray();
+      const tasksWithId : any = result.map((task:any) => {
+        const { _id, ...rest } = task;
+        return { id: _id.toHexString(), ...rest };
+      });
 
+      const tasksState: TasksState = {
+        overdue: tasksWithId.filter((task: any) => {
+          return (task.status === "todo" || task.status === "doing") && new Date(task.deadline) <= new Date();
+        }),
+        todo: tasksWithId.filter((task: any) => {
+          return task.status === "todo" && new Date(task.deadline) > new Date();
+        }),
+        doing: tasksWithId.filter((task: any) => {
+          return task.status === "doing" && new Date(task.deadline) > new Date();
+        }),
+        done: tasksWithId.filter((task: any) => {
+          return task.status === "done";
+        }),
+      };
       
-    return NextResponse.json({ success: true, data: result }, { status: 200 });
+      return NextResponse.json({ success: true, data: tasksState }, { status: 200 });
+    
+      
   } catch (e) {
     console.log(e)
-    return NextResponse.json({ success: true, data: e }, { status: 200 });
+    return NextResponse.json({ success: false, data: e }, { status: 400 });
   }
 }
 export async function POST(req: Request) {
@@ -31,7 +51,7 @@ export async function POST(req: Request) {
     const db = client.db("TodoApp");
     const collection = db.collection("TodoCollection")
     const taskData = await req.json()
-    taskData.deadline = new Date(taskData.deadline)
+    console.log(taskData)
     const {id,...value} = taskData
     await collection.insertOne(value)
     return NextResponse.json({ success: true, data: value._id }, { status: 200 });

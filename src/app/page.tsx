@@ -4,7 +4,7 @@ import TodoPanel from "@/components/todoPanel";
 import DoingPanel from "@/components/doingPanel";
 import DonePanel from "@/components/donePanel";
 import OverduePanel from "@/components/overduePanel";
-import { useTaskContext } from "@/context/TastContext";
+import { useTaskContext } from "@/context/TaskContextProvider";
 
 
 const App = () => {

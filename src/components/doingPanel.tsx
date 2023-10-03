@@ -3,7 +3,7 @@ import inprogress from "@/public/images/inprogress.png";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import Image from 'next/image';
 import TaskItem from "@/components/Task/TaskItem";
-import { useTaskContext } from "@/context/TastContext";
+import { useTaskContext } from "@/context/TaskContextProvider";
 
 // interface PropTypes {
 //   tasks: Task[];
@@ -20,8 +20,15 @@ import { useTaskContext } from "@/context/TastContext";
 // }
 
 const DoingPanel = () => {
-  const {tasks,addTask} = useTaskContext();
-  const doingTask = tasks.doing
+  const {tasks,addTask,error,isLoading} = useTaskContext();
+  if(error){
+    return "error ..."
+  }
+  if(isLoading){
+    return "loading ..."
+  }
+  if(tasks){
+    const doingTask = tasks?.doing
     return (
     <div className="w-[26rem]">
       <div>
@@ -54,6 +61,8 @@ const DoingPanel = () => {
       </Droppable>
     </div>
   );
+  }
+
 };
 
 export default DoingPanel;

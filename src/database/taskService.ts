@@ -28,7 +28,7 @@ export async function axiosPut(route: string, body = {}) {
   }
 export async function axiosGet(route: string) {
     return await instance
-      .post(`${route}`)
+      .get(`${route}`)
       .then(({ data }) => {
         return data;
       })

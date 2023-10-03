@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import Image from 'next/image';
-import { useTaskContext } from '@/context/TastContext';
+import { useTaskContext } from '@/context/TaskContextProvider';
 import { Task } from '@/types/index';
 import completeImg from "@/public/images/complete.png";
 import editImg from "@/public/images/edit.png";

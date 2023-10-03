@@ -22,8 +22,8 @@ export default function TaskDialog(props: any) {
     const handleFormSubmit = async () => {
         if (taskFormRef.current) {
             taskFormRef.current.handleSubmit();
-            await setDialog(false)
-            setIsEdit(false)
+            // setDialog(false)
+            // setIsEdit(false)
 
         }
         
